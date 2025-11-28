@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analizador Estadístico Profesional</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navbar mejorado -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary shadow-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <i class="bi bi-graph-up-arrow fs-3 me-2"></i>
+                <span class="fw-bold">Analizador Estadístico Pro</span>
+            </a>
+            <button id="exportExcelBtn" class="btn btn-light btn-sm ms-auto" style="display: none;">
+                <i class="bi bi-file-earmark-excel"></i> Exportar a Excel
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="display-5 fw-bold text-white mb-3">
+                        <i class="bi bi-calculator-fill"></i> Análisis Estadístico Completo
+                    </h1>
+                    <p class="lead text-white-50">Tablas de frecuencias, medidas estadísticas y visualizaciones profesionales</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="hero-stats">
+                        <div class="stat-badge">
+                            <i class="bi bi-speedometer2"></i>
+                            <span>Rápido</span>
+                        </div>
+                        <div class="stat-badge">
+                            <i class="bi bi-precision"></i>
+                            <span>Preciso</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container my-5">
+        <div class="row">
+            <!-- Panel de entrada mejorado -->
+            <div class="col-lg-4">
+                <div class="card shadow-lg border-0 mb-4 card-hover">
+                    <div class="card-header bg-gradient-primary text-white border-0">
+                        <h5 class="mb-0 d-flex align-items-center">
+                            <i class="bi bi-input-cursor-text me-2"></i> 
+                            Entrada de Datos
+                        </h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-primary">
+                                <i class="bi bi-layers"></i> Tipo de Datos:
+                            </label>
+                            <select id="dataType" class="form-select form-select-lg shadow-sm">
+                                <option value="no-agrupados">📊 Datos No Agrupados</option>
+                                <option value="agrupados">📈 Datos Agrupados (Intervalos)</option>
+                            </select>
+                        </div>
+
+                        <div id="noAgrupadosInput">
+                            <label class="form-label fw-bold text-primary">
+                                <i class="bi bi-123"></i> Ingrese los datos:
+                            </label>
+                            <textarea id="dataInput" class="form-control form-control-lg shadow-sm" rows="5" 
+                                placeholder="Ejemplo: 12, 15, 18, 20, 22, 15, 18, 25, 30..."></textarea>
+                            <small class="text-muted d-block mt-2">
+                                <i class="bi bi-info-circle"></i> Separe los valores con comas o espacios
+                            </small>
+                        </div>
+
+                        <div id="agrupadosInput" style="display: none;">
+                            <label class="form-label fw-bold text-primary">
+                                <i class="bi bi-diagram-3"></i> Número de clases/intervalos:
+                            </label>
+                            <input type="number" id="numClases" class="form-control form-control-lg shadow-sm mb-2" 
+                                min="3" max="20" value="5">
+                            <small class="text-muted">
+                                <i class="bi bi-lightbulb"></i> Los datos se agruparán automáticamente
+                            </small>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button id="processBtn" class="btn btn-success btn-lg shadow-sm">
+                                <i class="bi bi-play-circle-fill"></i> Procesar Datos
+                            </button>
+                            <button id="clearBtn" class="btn btn-outline-danger btn-lg">
+                                <i class="bi bi-trash3"></i> Limpiar Todo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Datos ordenados mejorado -->
+                <div class="card shadow-lg border-0 card-hover">
+                    <div class="card-header bg-gradient-info text-white border-0">
+                        <h6 class="mb-0 d-flex align-items-center">
+                            <i class="bi bi-sort-numeric-down me-2"></i> 
+                            Datos Ordenados
+                        </h6>
+                    </div>
+                    <div class="card-body p-3">
+                        <div id="sortedData" class="sorted-data">
+                            <div class="text-center py-4">
+                                <i class="bi bi-inbox fs-1 text-muted"></i>
+                                <p class="text-muted mt-2 mb-0">Los datos ordenados aparecerán aquí...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resultados mejorados -->
+            <div class="col-lg-8">
+                <div id="resultsSection" style="display: none;">
+                    
+                    <!-- Tabla de frecuencias mejorada -->
+                    <div class="card shadow-lg border-0 mb-4 card-hover">
+                        <div class="card-header bg-gradient-success text-white border-0 d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">
+                                <i class="bi bi-table"></i> Tabla de Frecuencias
+                            </h5>
+                            <button class="btn btn-sm btn-light" onclick="toggleExpand('frequencyTableCard')">
+                                <i class="bi bi-arrows-fullscreen"></i>
+                            </button>
+                        </div>
+                        <div class="card-body p-4" id="frequencyTableCard">
+                            <div class="table-responsive">
+                                <table id="frequencyTable" class="table table-hover table-modern"></table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Medidas de tendencia central -->
+                    <div class="card shadow-lg border-0 mb-4 card-hover">
+                        <div class="card-header bg-gradient-warning text-dark border-0">
+                            <h5 class="mb-0">
+                                <i class="bi bi-bullseye"></i> Medidas de Tendencia Central
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div id="centralMeasures" class="row g-3"></div>
+                        </div>
+                    </div>
+
+                    <!-- Medidas de dispersión -->
+                    <div class="card shadow-lg border-0 mb-4 card-hover">
+                        <div class="card-header bg-gradient-danger text-white border-0">
+                            <h5 class="mb-0">
+                                <i class="bi bi-arrows-angle-expand"></i> Medidas de Dispersión
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div id="dispersionMeasures" class="row g-3"></div>
+                        </div>
+                    </div>
+
+                    <!-- Cuantiles -->
+                    <div class="card shadow-lg border-0 mb-4 card-hover">
+                        <div class="card-header bg-gradient-secondary text-white border-0">
+                            <h5 class="mb-0">
+                                <i class="bi bi-list-columns-reverse"></i> Cuantiles
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div id="quantiles"></div>
+                        </div>
+                    </div>
+
+                    <!-- Gráficos mejorados con expand -->
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card shadow-lg border-0 card-hover">
+                                <div class="card-header bg-gradient-primary text-white border-0 d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0">
+                                        <i class="bi bi-bar-chart-fill"></i> Histograma
+                                    </h6>
+                                    <button class="btn btn-sm btn-light" onclick="expandChart('histogram')">
+                                        <i class="bi bi-arrows-fullscreen"></i>
+                                    </button>
+                                </div>
+                                <div class="card-body p-3">
+                                    <canvas id="histogram"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card shadow-lg border-0 card-hover">
+                                <div class="card-header bg-gradient-primary text-white border-0 d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0">
+                                        <i class="bi bi-pie-chart-fill"></i> Gráfico Circular
+                                    </h6>
+                                    <button class="btn btn-sm btn-light" onclick="expandChart('pieChart')">
+                                        <i class="bi bi-arrows-fullscreen"></i>
+                                    </button>
+                                </div>
+                                <div class="card-body p-3">
+                                    <canvas id="pieChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-4 mt-2">
+                        <div class="col-md-6">
+                            <div class="card shadow-lg border-0 card-hover">
+                                <div class="card-header bg-gradient-primary text-white border-0 d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0">
+                                        <i class="bi bi-box-seam"></i> Diagrama de Caja
+                                    </h6>
+                                    <button class="btn btn-sm btn-light" onclick="expandChart('boxPlot')">
+                                        <i class="bi bi-arrows-fullscreen"></i>
+                                    </button>
+                                </div>
+                                <div class="card-body p-3">
+                                    <canvas id="boxPlot"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card shadow-lg border-0 card-hover">
+                                <div class="card-header bg-gradient-primary text-white border-0 d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0">
+                                        <i class="bi bi-diagram-3-fill"></i> Diagrama de Dispersión
+                                    </h6>
+                                    <button class="btn btn-sm btn-light" onclick="expandChart('scatterPlot')">
+                                        <i class="bi bi-arrows-fullscreen"></i>
+                                    </button>
+                                </div>
+                                <div class="card-body p-3">
+                                    <canvas id="scatterPlot"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para vista expandida -->
+    <div class="modal fade" id="chartModal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="chartModalLabel">
+                        <i class="bi bi-graph-up"></i> Vista Expandida
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <canvas id="expandedChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <p class="mb-0">
+            <i class="bi bi-calculator"></i> Analizador Estadístico Profesional © 2024
+        </p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
