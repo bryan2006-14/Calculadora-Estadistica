@@ -448,36 +448,68 @@ function createHistogram(freqData, isGrouped) {
             datasets: [{
                 label: 'Frecuencia',
                 data: freqData.map(d => d.frequency),
-                backgroundColor: 'rgba(102, 126, 234, 0.8)',
-                borderColor: 'rgba(102, 126, 234, 1)',
-                borderWidth: 2,
-                borderRadius: 8
+                backgroundColor: 'rgba(135, 206, 235, 0.7)',
+                borderColor: 'rgba(0, 0, 0, 0.8)',
+                borderWidth: 1,
+                borderRadius: 0,
+                barPercentage: 1.0,
+                categoryPercentage: 1.0
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: true,
             plugins: {
-                legend: { 
-                    display: true,
-                    labels: { font: { size: 14, weight: 'bold' } }
-                },
+                legend: { display: false },
                 title: { 
                     display: true, 
                     text: 'Histograma de Frecuencias', 
-                    font: { size: 18, weight: 'bold' },
-                    color: '#333'
+                    font: { size: 16, weight: 'bold' },
+                    color: '#000',
+                    padding: { bottom: 20 }
                 }
             },
             scales: {
                 y: { 
                     beginAtZero: true,
-                    title: { display: true, text: 'Frecuencia', font: { size: 14, weight: 'bold' } },
-                    grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                    title: { 
+                        display: false
+                    },
+                    grid: { 
+                        display: true,
+                        color: 'rgba(0, 0, 0, 0.1)',
+                        drawBorder: true
+                    },
+                    ticks: {
+                        color: '#000',
+                        font: { size: 12 }
+                    },
+                    border: {
+                        display: true,
+                        color: '#000',
+                        width: 2
+                    }
                 },
                 x: {
-                    title: { display: true, text: isGrouped ? 'Intervalos' : 'Valores', font: { size: 14, weight: 'bold' } },
-                    grid: { display: false }
+                    title: { display: false },
+                    grid: { display: false },
+                    ticks: {
+                        color: '#000',
+                        font: { size: 11 }
+                    },
+                    border: {
+                        display: true,
+                        color: '#000',
+                        width: 2
+                    }
+                }
+            },
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 10,
+                    top: 10,
+                    bottom: 10
                 }
             }
         }
